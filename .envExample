@@ -1,0 +1,2 @@
+JWT_SECRET=BEAAE153E6CDAA8F9AC264B888D7B
+MONGO_URI=mongodb://localhost:27017/todoapp  # or your MongoDB Atlas connection URI
