@@ -54,17 +54,20 @@ exports.deleteTask = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const user = await User.findById(req.user.id);
-    const task = user.tasks.id(id);
+    const user = await User.findById(req.user.id);  // Find user by ID from the token
+    const task = user.tasks.id(id);                 // Find task by ID
 
     if (!task) {
       return res.status(404).json({ message: 'Task not found' });
     }
 
-    task.remove();
-    await user.save();
-    res.status(204).end();
+    // Use `pull` to remove the task from the tasks array
+    user.tasks.pull(id);
+    await user.save();  // Save the user document after task removal
+
+    res.status(204).end();  // No content to return
   } catch (err) {
-    res.status(500).json({ message: 'Server error' });
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });  // Send 500 Internal Server Error if anything fails
   }
 };
